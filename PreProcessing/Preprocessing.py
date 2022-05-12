@@ -2,11 +2,10 @@ from statistics import median
 
 import pandas as pd
 from matplotlib import pyplot as plt
-import seaborn as sn
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import preprocessing
 
-from helper_functions import replace_nulls_with_mode
+from helper_functions import replace_nulls_with_mode, print_correlation_matrix
 
 pd.set_option('display.max_columns', None)
 
@@ -57,10 +56,11 @@ def preprocessing():
     test_data.drop(['Var_1'], axis=1, inplace=True)
 
     # print(train_data.isnull().sum(axis=0))
-    # REPLACE NULLS WITH THE MEDIAN VALUE OF THE COLUMN.
+    # REPLACE NULLS WITH THE MODE VALUE OF THE COLUMN.
     train_data = replace_nulls_with_mode(train_data)
     test_data = replace_nulls_with_mode(test_data)
-    print(train_data.isnull().sum(axis=0))
+    # PRINT CORRELATION MATRIX
+    print_correlation_matrix(train_data)
 
     return train_data, test_data
 

@@ -1,6 +1,7 @@
 # Write predictions in csv file.
 from statistics import median, mode
-
+import seaborn as sn
+from matplotlib import pyplot as plt
 from sklearn import preprocessing
 from sklearn.preprocessing import MinMaxScaler
 
@@ -41,3 +42,9 @@ def replace_nulls_with_mode(data):
     data['Work_Experience'] = data['Work_Experience'].fillna(mode(data['Work_Experience']))
     data['Family_Size'] = data['Family_Size'].fillna(mode(data['Family_Size']))
     return data
+
+
+def print_correlation_matrix(data):
+    corr_mat = data.corr()
+    sn.heatmap(corr_mat, annot=True)
+    plt.show()
