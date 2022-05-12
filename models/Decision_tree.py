@@ -1,5 +1,5 @@
 import math
-
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix, mean_absolute_error, mean_squared_error
@@ -30,7 +30,8 @@ write_to_csv(IDs,'../predictions/predictedFromDecisionTree.csv', y_pred)
 x_train, x_test, y_train, y_test= train_test_split(x, y, test_size= 0.2, random_state=0)
 
 #Predicting the test set result
-classifier= DecisionTreeClassifier(criterion='entropy', random_state=0)
+classifier= DecisionTreeClassifier(criterion='gini', splitter='random', random_state=0)
+#classifier= DecisionTreeClassifier(criterion='entropy', splitter='best', random_state=0)
 classifier.fit(x_train, y_train)
 y_pred= classifier.predict(x_test)
 
@@ -54,6 +55,4 @@ mtp.xlabel('Age')
 mtp.ylabel('Estimated Salary')
 mtp.legend()
 mtp.show()'''
-
-#print("MAE",mean_absolute_error(y_test,y_pred))
-#print("RMSE", math.sqrt(mean_squared_error(y_test, y_pred)))
+print("Acc: ",accuracy_score(y_test, y_pred))
