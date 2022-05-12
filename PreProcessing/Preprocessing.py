@@ -6,6 +6,8 @@ import seaborn as sn
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import preprocessing
 
+from helper_functions import replace_nulls_with_mode
+
 pd.set_option('display.max_columns', None)
 
 
@@ -56,14 +58,9 @@ def preprocessing():
 
     # print(train_data.isnull().sum(axis=0))
     # REPLACE NULLS WITH THE MEDIAN VALUE OF THE COLUMN.
-    train_data['Ever_Married'] = train_data['Ever_Married'].fillna(median(train_data['Ever_Married']))
-    train_data['Graduated'] = train_data['Graduated'].fillna(median(train_data['Graduated']))
-    train_data['Work_Experience'] = train_data['Work_Experience'].fillna(median(train_data['Work_Experience']))
-    train_data['Family_Size'] = train_data['Family_Size'].fillna(median(train_data['Family_Size']))
-    test_data['Ever_Married'] = test_data['Ever_Married'].fillna(median(test_data['Ever_Married']))
-    test_data['Graduated'] = test_data['Graduated'].fillna(median(test_data['Graduated']))
-    test_data['Work_Experience'] = test_data['Work_Experience'].fillna(median(test_data['Work_Experience']))
-    test_data['Family_Size'] = test_data['Family_Size'].fillna(median(test_data['Family_Size']))
+    train_data = replace_nulls_with_mode(train_data)
+    test_data = replace_nulls_with_mode(test_data)
+    print(train_data.isnull().sum(axis=0))
 
     return train_data, test_data
 
