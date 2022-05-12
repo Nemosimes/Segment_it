@@ -4,7 +4,7 @@ from sklearn.metrics import accuracy_score
 from PreProcessing.Preprocessing import preprocessing
 from helper_functions import write_to_csv
 
-train_data, test_data = preprocessing()
+train_data, test_data = preprocessing(mode=0)
 IDs=test_data["ID"]
 #data
 train_data = train_data.drop(['ID'], axis=1)
