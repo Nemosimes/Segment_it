@@ -6,11 +6,11 @@ from sklearn import preprocessing
 from sklearn.preprocessing import MinMaxScaler
 
 
-def write_to_csv(file_name, predictions):
+def write_to_csv(IDs,file_name, predictions):
     with open(file_name, 'w') as f:
         f.write("ID,Segmentation\n")
         for i in range(len(predictions)):
-            f.write(str(i) + ',' + str(predictions[i]) + '\n')
+            f.write(str(IDs[i]) + ',' + str(predictions[i]) + '\n')
 
 
 def normalize_data(data):

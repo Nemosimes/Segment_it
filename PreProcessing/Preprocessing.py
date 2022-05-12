@@ -65,4 +65,3 @@ def preprocessing():
     return train_data, test_data
 
 
-preprocessing()
