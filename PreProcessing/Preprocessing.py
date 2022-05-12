@@ -7,8 +7,8 @@ pd.set_option('display.max_columns', None)
 
 def preprocessing():
     # Date Reading
-    train_data = pd.read_csv('data/train.csv')
-    test_data = pd.read_csv('data/test.csv')
+    train_data = pd.read_csv('../data/train.csv')
+    test_data = pd.read_csv('../data/test.csv')
 
     # 1-Filter input features
     # print(data['Holiday'].unique()) #['No Holiday' 'Holiday']
