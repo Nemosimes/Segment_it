@@ -10,35 +10,33 @@ from helper_functions import write_to_csv
 
 train_data, test_data = preprocessing(1)
 
-
-#data
-IDs=test_data["ID"]
+# data
+IDs = test_data["ID"]
 train_data = train_data.drop(['ID'], axis=1)
 test_data = test_data.drop(['ID'], axis=1)
 y = train_data['Segmentation'].values.reshape(-1, 1)
 x = train_data.drop(['Segmentation'], axis=1).values
 
+# Fitting Decision Tree classifier to the training set
 
-#Fitting Decision Tree classifier to the training set
-
-classifier= DecisionTreeClassifier(criterion='entropy', random_state=0)
+classifier = DecisionTreeClassifier(criterion='entropy', random_state=0)
 classifier.fit(x, y)
 y_pred = classifier.predict(test_data)
-write_to_csv(IDs,'../predictions/predictedFromDecisionTree.csv', y_pred)
+write_to_csv(IDs, '../predictions/predictedFromDecisionTree.csv', y_pred)
 
 # Splitting the dataset into training and test set.
-x_train, x_test, y_train, y_test= train_test_split(x, y, test_size= 0.2, random_state=0)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
-#Predicting the test set result
-classifier= DecisionTreeClassifier(criterion='gini', splitter='random', random_state=0)
-#classifier= DecisionTreeClassifier(criterion='entropy', splitter='best', random_state=0)
+# Predicting the test set result
+classifier = DecisionTreeClassifier(criterion='gini', splitter='random', random_state=0)
+# classifier= DecisionTreeClassifier(criterion='entropy', splitter='best', random_state=0)
 classifier.fit(x_train, y_train)
-y_pred= classifier.predict(x_test)
+y_pred = classifier.predict(x_test)
 
-#Creating the Confusion matrix
-cm= confusion_matrix(y_test, y_pred)
+# Creating the Confusion matrix
+cm = confusion_matrix(y_test, y_pred)
 
-#Visulaizing the trianing set result
+# Visulaizing the trianing set result
 '''from matplotlib.colors import ListedColormap
 x_set, y_set = x_train, y_train
 x1, x2 = nm.meshgrid(nm.arange(start = x_set[:, 0].min() - 1, stop = x_set[:, 0].max() + 1, step  =0.01),
@@ -55,4 +53,4 @@ mtp.xlabel('Age')
 mtp.ylabel('Estimated Salary')
 mtp.legend()
 mtp.show()'''
-print("Acc: ",accuracy_score(y_test, y_pred))
+print("Acc: ", accuracy_score(y_test, y_pred))
