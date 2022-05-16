@@ -22,7 +22,7 @@ write_to_csv(IDs, '../predictions/predictedFromSVM.csv', y_pred)
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
 # Predicting the test set result
-model = SVC(kernel='linear')
+model = SVC(kernel='poly')
 model.fit(x_train, y_train)
 y_pred = model.predict(x_test)
 
