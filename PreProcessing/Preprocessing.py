@@ -64,6 +64,6 @@ def preprocessing(mode):
         test_data = replace_nulls_with_median(test_data)
 
     # PRINT CORRELATION MATRIX
-    print_correlation_matrix(train_data)
+    #print_correlation_matrix(train_data)
 
     return train_data, test_data
