@@ -34,12 +34,12 @@ x = train_data.drop(['Segmentation'], axis=1).values
 # initializing all the model objects with default parameters
 
 model_1 = DecisionTreeClassifier(criterion='entropy', random_state=0)
-model_2 = SVC(kernel='poly')
+model_2 = SVC(C= 1000, gamma= 0.001, kernel='rbf',probability = True)
 model_3 =GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
 
+estimator = [('Dt', model_1), ('SVC', model_2), ('GradientBoosting', model_3)]
 # Making the final model using voting classifier
-final_model = VotingClassifier(
-	estimators=[('Dt', model_1), ('SVC', model_2), ('GradientBoosting', model_3)], voting='hard')
+final_model = VotingClassifier(estimators=estimator, voting='hard')
 
 # training all the model on the train dataset
 final_model.fit(x, y)
@@ -53,8 +53,18 @@ write_to_csv(IDs, '../predictions/predictedFromEnsmbleVoting.csv', pred_final)
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
 # Predicting the test set result
-model = VotingClassifier(estimators=[('Dt', model_1), ('SVC', model_2), ('GradientBoosting', model_3)], voting='hard')
+
+model = VotingClassifier(estimators=estimator, voting='hard')
 model.fit(x_train, y_train)
 y_pred = model.predict(x_test)
 
+
+from sklearn.metrics import classification_report, confusion_matrix
+# print classification report
+print(classification_report(y_test, y_pred))
+
 print("Acc: ", accuracy_score(y_test, y_pred))
+
+
+
+
