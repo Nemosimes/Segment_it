@@ -22,7 +22,6 @@ test_data = test_data.drop(['Var_1_Cat_5'], axis=1)
 train_data = train_data.drop(['Var_1_Cat_1'], axis=1)
 test_data = test_data.drop(['Var_1_Cat_1'], axis=1)
 
-
 IDs = test_data["ID"]
 # data
 train_data = train_data.drop(['ID'], axis=1)
@@ -34,18 +33,18 @@ x = train_data.drop(['Segmentation'], axis=1).values
 
 # initializing all the model objects with default parameters
 
-model_2 = DecisionTreeClassifier(criterion='entropy', random_state=0)
-model_3 = SVC(kernel='poly')
-model_4 =GradientBoostingClassifier(n_estimators=100, learning_rate=1.0,max_depth=1, random_state=0)
+model_1 = DecisionTreeClassifier(criterion='entropy', random_state=0)
+model_2 = SVC(kernel='poly')
+model_3 =GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
 
 # Making the final model using voting classifier
 final_model = VotingClassifier(
-	estimators=[ ('Dt', model_2), ('SVC', model_3), ('GradientBoosting', model_4)], voting='hard')
+	estimators=[('Dt', model_1), ('SVC', model_2), ('GradientBoosting', model_3)], voting='hard')
 
 # training all the model on the train dataset
 final_model.fit(x, y)
 pred_final = final_model.predict(test_data)
-write_to_csv(IDs, '../predictions/predictedFromEnsmble.csv', pred_final)
+write_to_csv(IDs, '../predictions/predictedFromEnsmbleVoting.csv', pred_final)
 
 
 
@@ -54,7 +53,7 @@ write_to_csv(IDs, '../predictions/predictedFromEnsmble.csv', pred_final)
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
 # Predicting the test set result
-model = VotingClassifier(estimators=[ ('Dt', model_2), ('SVC', model_3), ('GradientBoosting', model_4)], voting='hard')
+model = VotingClassifier(estimators=[('Dt', model_1), ('SVC', model_2), ('GradientBoosting', model_3)], voting='hard')
 model.fit(x_train, y_train)
 y_pred = model.predict(x_test)
 
