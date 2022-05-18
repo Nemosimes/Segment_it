@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import preprocessing
 
-from helper_functions import replace_nulls_with_mode, replace_nulls_with_median, print_correlation_matrix, \
+from helper_functions import replace_nulls_with_mode, replace_nulls_with_median,replace_nulls, print_correlation_matrix, \
     standardize_data
 
 pd.set_option('display.max_columns', None)
@@ -40,6 +40,28 @@ def preprocessing(mode):
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['Average'], 1)
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['High'], 2)
 
+
+    if (mode == 2):
+        print(train_data.isnull().sum(axis=0))
+        print(test_data.isnull().sum(axis=0))
+        train_data, test_data = replace_nulls(train_data, test_data)
+    ''' 
+    OneHotEncoder_gender = pd.get_dummies(train_data['Gender'], prefix='Gender')
+    train_data = train_data.join(OneHotEncoder_gender)
+    train_data.drop('Gender', axis=1, inplace=True)
+
+    OneHotEncoder_gender = pd.get_dummies(test_data['Gender'], prefix='Gender')
+    test_data = test_data.join(OneHotEncoder_gender)
+    test_data.drop('Gender', axis=1, inplace=True)
+
+    OneHotEncoder_grad = pd.get_dummies(train_data['Graduated'], prefix='Graduated')
+    train_data = train_data.join(OneHotEncoder_grad)
+    train_data.drop('Graduated', axis=1, inplace=True)
+
+    OneHotEncoder_grad = pd.get_dummies(test_data['Graduated'], prefix='Graduated')
+    test_data = test_data.join(OneHotEncoder_grad)
+    test_data.drop('Graduated', axis=1, inplace=True)'''
+
     OneHotEncoder_prof = pd.get_dummies(train_data['Profession'], prefix='Profession')
     train_data = train_data.join(OneHotEncoder_prof)
     train_data.drop(['Profession'], axis=1, inplace=True)
@@ -56,17 +78,17 @@ def preprocessing(mode):
     test_data = test_data.join(OneHotEncoder_var)
     test_data.drop(['Var_1'], axis=1, inplace=True)
 
-    # print(train_data.isnull().sum(axis=0))
-    # REPLACE NULLS WITH THE MODE OR THE MEDIAN VALUE OF THE COLUMN.
-    if mode == 1:
+    # REPLACE NULLS WITH THE MODE VALUE OF THE COLUMN.
+    if (mode == 1):
         train_data = replace_nulls_with_mode(train_data)
         test_data = replace_nulls_with_mode(test_data)
     else:
         train_data = replace_nulls_with_median(train_data)
         test_data = replace_nulls_with_median(test_data)
-
+    print(train_data.isnull().sum(axis=0))
+    print(test_data.isnull().sum(axis=0))
     # PRINT CORRELATION MATRIX
-    #print_correlation_matrix(train_data)
+    # print_correlation_matrix(train_data)
 
     return train_data, test_data
 

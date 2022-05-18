@@ -1,5 +1,5 @@
 # Write predictions in csv file.
-from statistics import median, mode
+from statistics import median, mode, mean
 import seaborn as sn
 from matplotlib import pyplot as plt
 from sklearn import preprocessing
@@ -25,6 +25,20 @@ def standardize_data(data):
     data = preprocessing.scale(data)
     return data
 
+def replace_nulls(train_data,test_data):
+    train_data['Ever_Married'] = train_data['Ever_Married'].fillna(mode(train_data['Ever_Married']))
+    test_data['Ever_Married'] = test_data['Ever_Married'].fillna(mode(test_data['Ever_Married']))
+    train_data['Graduated'] = train_data['Graduated'].fillna(mode(train_data['Graduated']))
+    test_data['Graduated'] = test_data['Graduated'].fillna(mode(test_data['Graduated']))
+    train_data['Work_Experience'] = train_data['Work_Experience'].fillna(median(train_data['Work_Experience']))
+    test_data['Work_Experience'] = test_data['Work_Experience'].fillna(median(test_data['Work_Experience']))
+    train_data['Family_Size'] = train_data['Family_Size'].fillna(mean(train_data['Family_Size']))
+    test_data['Family_Size'] = test_data['Family_Size'].fillna(mean(test_data['Family_Size']))
+    train_data['Profession'] = train_data['Profession'].fillna(mode(train_data['Profession']))
+    test_data['Profession'] = test_data['Profession'].fillna(mode(test_data['Profession']))
+    train_data['Var_1'] = train_data['Var_1'].fillna(mode(train_data['Var_1']))
+    test_data['Var_1'] = test_data['Var_1'].fillna(mode(test_data['Var_1']))
+    return train_data,test_data
 
 def replace_nulls_with_median(data):
     # standardization of dependent variables
@@ -40,6 +54,7 @@ def replace_nulls_with_mode(data):
     data['Ever_Married'] = data['Ever_Married'].fillna(mode(data['Ever_Married']))
     data['Graduated'] = data['Graduated'].fillna(mode(data['Graduated']))
     data['Work_Experience'] = data['Work_Experience'].fillna(mode(data['Work_Experience']))
+    #data['Profession'] = data['Profession'].fillna(mode(data['Profession']))
     data['Family_Size'] = data['Family_Size'].fillna(mode(data['Family_Size']))
     return data
 
