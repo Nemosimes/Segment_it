@@ -5,7 +5,8 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import preprocessing
 
-from helper_functions import replace_nulls_with_mode, replace_nulls_with_median,replace_nulls, print_correlation_matrix, \
+from helper_functions import replace_nulls_with_mode, replace_nulls_with_median, replace_nulls, \
+    print_correlation_matrix, \
     standardize_data
 
 pd.set_option('display.max_columns', None)
@@ -39,7 +40,6 @@ def preprocessing(mode):
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['Low'], 0)
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['Average'], 1)
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['High'], 2)
-
 
     if (mode == 2):
         print(train_data.isnull().sum(axis=0))
