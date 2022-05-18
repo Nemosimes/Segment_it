@@ -1,10 +1,12 @@
 from statistics import median
 import pandas as pd
 from matplotlib import pyplot as plt
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import OneHotEncoder
 from sklearn import preprocessing
 
-from helper_functions import replace_nulls_with_mode, replace_nulls_with_median, print_correlation_matrix
+from helper_functions import replace_nulls_with_mode, replace_nulls_with_median, print_correlation_matrix, \
+    standardize_data
 
 pd.set_option('display.max_columns', None)
 
@@ -67,3 +69,29 @@ def preprocessing(mode):
     #print_correlation_matrix(train_data)
 
     return train_data, test_data
+
+
+def applyPCA(train_data, labels):
+    standardized_data = standardize_data(train_data)
+    pca = PCA(n_components=20)
+    principalComponents = pca.fit_transform(standardized_data)
+    principalDf = pd.DataFrame(data=principalComponents, )
+    print(principalDf)
+    # finalDf = pd.concat([principalDf, labels], axis=1)
+    return principalDf
+    # fig = plt.figure(figsize=(8, 8))
+    # ax = fig.add_subplot(1, 1, 1)
+    # ax.set_xlabel('Principal Component 1', fontsize=15)
+    # ax.set_ylabel('Principal Component 2', fontsize=15)
+    # ax.set_title('2 component PCA', fontsize=20)
+    # targets = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+    # colors = ['r', 'g', 'b']
+    # for target, color in zip(targets, colors):
+    #     indicesToKeep = finalDf['Segmentation'] == target
+    #     ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
+    #                , finalDf.loc[indicesToKeep, 'principal component 2']
+    #                , c=color
+    #                , s=50)
+    # ax.legend(targets)
+    # ax.grid()
+    # pca.explained_variance_ratio_

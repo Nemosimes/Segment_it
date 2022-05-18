@@ -6,23 +6,17 @@ from sklearn.metrics import confusion_matrix, mean_absolute_error, mean_squared_
 from PreProcessing.Preprocessing import preprocessing
 
 # importing datasets
-from helper_functions import write_to_csv
+from helper_functions import write_to_csv, get_model_data
 
 train_data, test_data = preprocessing(1)
-
-# data
-IDs = test_data["ID"]
-train_data = train_data.drop(['ID'], axis=1)
-test_data = test_data.drop(['ID'], axis=1)
-y = train_data['Segmentation'].values.reshape(-1, 1)
-x = train_data.drop(['Segmentation'], axis=1).values
+x, y, ids, test_data = get_model_data(train_data, test_data)
 
 # Fitting Decision Tree classifier to the training set
 
 classifier = DecisionTreeClassifier(criterion='entropy', random_state=0)
 classifier.fit(x, y)
 y_pred = classifier.predict(test_data)
-write_to_csv(IDs, '../predictions/predictedFromDecisionTree.csv', y_pred)
+write_to_csv(ids, '../predictions/predictedFromDecisionTree.csv', y_pred)
 
 # Splitting the dataset into training and test set.
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
