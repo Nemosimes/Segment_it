@@ -33,7 +33,7 @@ x = train_data.drop(['Segmentation'], axis=1).values
 
 # initializing all the model objects with default parameters
 
-model_1 = DecisionTreeClassifier(criterion='entropy', random_state=0)
+model_1 = DecisionTreeClassifier(criterion='gini', splitter='random', random_state=0)
 model_2 = SVC(C= 1000, gamma= 0.001, kernel='rbf',probability = True)
 model_3 =GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
 
