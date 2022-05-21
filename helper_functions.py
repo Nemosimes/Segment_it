@@ -66,19 +66,27 @@ def print_correlation_matrix(data):
 
 
 def convert_segmentation_to_int(data):
-    data['Segmentation'] = data['Segmentation'].replace(['A'], 1)
-    data['Segmentation'] = data['Segmentation'].replace(['B'], 2)
-    data['Segmentation'] = data['Segmentation'].replace(['C'], 3)
-    data['Segmentation'] = data['Segmentation'].replace(['D'], 4)
+    data['Segmentation'] = data['Segmentation'].replace(['A'], 0)
+    data['Segmentation'] = data['Segmentation'].replace(['B'], 1)
+    data['Segmentation'] = data['Segmentation'].replace(['C'], 2)
+    data['Segmentation'] = data['Segmentation'].replace(['D'], 3)
     return data
 
 
 def convert_segmentation_to_string(data):
-    data['Segmentation'] = data['Segmentation'].replace([1], 'A')
-    data['Segmentation'] = data['Segmentation'].replace([2], 'B')
-    data['Segmentation'] = data['Segmentation'].replace([3], 'C')
-    data['Segmentation'] = data['Segmentation'].replace([4], 'D')
-    return data
+    newList = []
+    print (data)
+    for i in range(len(data)):
+        print(data[i])
+        if data[i] == 0:
+            newList.append('A')
+        elif data[i] == 1:
+            newList.append('B')
+        elif data[i] == 2:
+            newList.append('C')
+        elif data[i] == 3:
+            newList.append('D')
+    return newList
 
 
 def get_model_data(train_data, test_data):

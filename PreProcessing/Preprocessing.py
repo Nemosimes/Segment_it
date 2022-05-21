@@ -42,8 +42,8 @@ def preprocessing(mode):
     test_data['Spending_Score'] = test_data['Spending_Score'].replace(['High'], 2)
 
     if (mode == 2):
-        print(train_data.isnull().sum(axis=0))
-        print(test_data.isnull().sum(axis=0))
+        # print(train_data.isnull().sum(axis=0))
+        # print(test_data.isnull().sum(axis=0))
         train_data, test_data = replace_nulls(train_data, test_data)
     ''' 
     OneHotEncoder_gender = pd.get_dummies(train_data['Gender'], prefix='Gender')
