@@ -3,6 +3,8 @@ from statistics import median, mode, mean
 import seaborn as sn
 from matplotlib import pyplot as plt
 from sklearn import preprocessing
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -106,3 +108,13 @@ def get_model_data(train_data, test_data):
     x = train_data.drop(['Segmentation'], axis=1).values
     y = train_data['Segmentation'].values.reshape(-1, 1)
     return x, y, ids, test_data
+
+
+def stKfoldCrossVal(clf,x,y):
+    clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
+    stratifiedkf = StratifiedKFold(n_splits=5)
+    score = cross_val_score(clf, x, y, cv=stratifiedkf)
+    # v=cross_val_score(clf, x, y, cv=stratifiedkf)
+    # print(v)
+    print("Cross Validation Scores are {}".format(score))
+    print("Average Cross Validation score :{}".format(score.mean()))
