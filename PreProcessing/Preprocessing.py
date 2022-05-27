@@ -14,9 +14,11 @@ pd.set_option('display.max_columns', None)
 
 def preprocessing(mode):
     # Date Reading
-    train_data = pd.read_csv('../data/train.csv')
-    test_data = pd.read_csv('../data/test.csv')
-
+    train_data = pd.read_csv('../../data/train.csv')
+    test_data = pd.read_csv('../../data/test.csv')
+    print(train_data.shape)
+    train_data = train_data[train_data.isnull().sum(axis=1) <2 ]
+    print (train_data.shape)
     # 1-Filter input features
     # print(data['Holiday'].unique()) #['No Holiday' 'Holiday']
     train_data['Gender'] = train_data['Gender'].replace(['Male'], 1)
@@ -85,8 +87,8 @@ def preprocessing(mode):
     else:
         train_data = replace_nulls_with_median(train_data)
         test_data = replace_nulls_with_median(test_data)
-    print(train_data.isnull().sum(axis=0))
-    print(test_data.isnull().sum(axis=0))
+    #print(train_data.isnull().sum(axis=0))
+    #print(test_data.isnull().sum(axis=0))
     # PRINT CORRELATION MATRIX
     # print_correlation_matrix(train_data)
 
