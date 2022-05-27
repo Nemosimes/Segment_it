@@ -3,7 +3,7 @@ from sklearn import metrics
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, KFold, LeavePOut
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PreProcessing.Preprocessing import preprocessing, applyPCA
@@ -19,14 +19,24 @@ x, y, ids, test_data = get_model_data(train_data, test_data)
 # explained_variance = pca.explained_variance_ratio_
 # print(explained_variance)
 '''
+
+clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
+stratifiedkf = StratifiedKFold(n_splits=5)
+#score = cross_val_score(clf, x, y, cv=stratifiedkf)
+v=cross_val_score(clf, x, y, cv=stratifiedkf)
+print(v)
+#print("Cross Validation Scores are {}".format(score))
+#print("Average Cross Validation score :{}".format(score.mean()))
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=23)
 
 clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
-clf.fit(x_train, y_train)
+'''clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
-print(accuracy_score(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))'''
 
-clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
+
+#clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
 clf.fit(x, y)
 y_pred = clf.predict(test_data)
-write_to_csv(ids, '../predictions/predictedFromGB.csv', y_pred)
+write_to_csv(ids, '../../predictions/predictedFromGB.csv', y_pred)
