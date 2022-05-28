@@ -27,7 +27,8 @@ def standardize_data(data):
     data = preprocessing.scale(data)
     return data
 
-def replace_nulls(train_data,test_data):
+
+def replace_nulls(train_data, test_data):
     train_data['Ever_Married'] = train_data['Ever_Married'].fillna(mode(train_data['Ever_Married']))
     test_data['Ever_Married'] = test_data['Ever_Married'].fillna(mode(test_data['Ever_Married']))
     train_data['Graduated'] = train_data['Graduated'].fillna(mode(train_data['Graduated']))
@@ -40,7 +41,8 @@ def replace_nulls(train_data,test_data):
     test_data['Profession'] = test_data['Profession'].fillna(mode(test_data['Profession']))
     train_data['Var_1'] = train_data['Var_1'].fillna(mode(train_data['Var_1']))
     test_data['Var_1'] = test_data['Var_1'].fillna(mode(test_data['Var_1']))
-    return train_data,test_data
+    return train_data, test_data
+
 
 def replace_nulls_with_median(data):
     # standardization of dependent variables
@@ -56,7 +58,7 @@ def replace_nulls_with_mode(data):
     data['Ever_Married'] = data['Ever_Married'].fillna(mode(data['Ever_Married']))
     data['Graduated'] = data['Graduated'].fillna(mode(data['Graduated']))
     data['Work_Experience'] = data['Work_Experience'].fillna(mode(data['Work_Experience']))
-    #data['Profession'] = data['Profession'].fillna(mode(data['Profession']))
+    # data['Profession'] = data['Profession'].fillna(mode(data['Profession']))
     data['Family_Size'] = data['Family_Size'].fillna(mode(data['Family_Size']))
     return data
 
@@ -77,7 +79,7 @@ def convert_segmentation_to_int(data):
 
 def convert_segmentation_to_string(data):
     newList = []
-    print (data)
+    print(data)
     for i in range(len(data)):
         print(data[i])
         if data[i] == 0:
@@ -110,7 +112,7 @@ def get_model_data(train_data, test_data):
     return x, y, ids, test_data
 
 
-def stKfoldCrossVal(clf,x,y):
+def stKfoldCrossVal(clf, x, y):
     clf = GradientBoostingClassifier(n_estimators=100, max_features="auto", random_state=23)
     stratifiedkf = StratifiedKFold(n_splits=5)
     score = cross_val_score(clf, x, y, cv=stratifiedkf)

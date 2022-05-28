@@ -1,4 +1,3 @@
-import inline
 import matplotlib
 import pandas as pd
 from sklearn import metrics
@@ -16,7 +15,7 @@ x, y, ids, test_data = get_model_data(train_data, test_data)
 x_train, x_test, y_train, y_test,  = train_test_split(x, y, test_size=0.2, random_state=23)
 
 # create a random forest classifier
-rfc = RandomForestClassifier(n_estimators=100, max_features="auto", random_state=23)
+rfc = RandomForestClassifier(n_estimators=500, max_features="sqrt",criterion='gini',max_depth= None, min_samples_split=50,min_samples_leaf=5, random_state=23)
 
 # train the model using the split training set
 rfc.fit(x_train, y_train)
@@ -33,7 +32,7 @@ rfc.fit(x_train, y_train)
 #
 # feature_imp = pd.Series(rfc.feature_importances_, index=columns).sort_values(ascending=False)
 # print(feature_imp)
-#
+
 # # Creating a bar plot
 # sns.barplot(x=feature_imp, y=feature_imp.index)
 # # Add labels to your graph
