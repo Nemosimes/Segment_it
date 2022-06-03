@@ -4,19 +4,29 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix, mean_absolute_error, mean_squared_error
 from PreProcessing.Preprocessing import preprocessing
+from helper_functions import write_to_csv,decision_boundary
 
 # importing datasets
-from helper_functions import write_to_csv, get_model_data
-
 train_data, test_data = preprocessing(1)
-x, y, ids, test_data = get_model_data(train_data, test_data)
+
+# data
+IDs = test_data["ID"]
+train_data = train_data.drop(['ID'], axis=1)
+test_data = test_data.drop(['ID'], axis=1)
+train_data['Segmentation'] = train_data['Segmentation'].replace(['A'], 3)
+train_data['Segmentation'] = train_data['Segmentation'].replace(['B'], 2)
+train_data['Segmentation'] = train_data['Segmentation'].replace(['C'], 1)
+train_data['Segmentation'] = train_data['Segmentation'].replace(['D'], 0)
+y = train_data['Segmentation'].values.reshape(-1, 1)
+x = train_data.drop(['Segmentation'], axis=1).values
 
 # Fitting Decision Tree classifier to the training set
 
-classifier = DecisionTreeClassifier(criterion='entropy', random_state=0)
+classifier = DecisionTreeClassifier(criterion='gini',splitter='random', random_state=0)
 classifier.fit(x, y)
 y_pred = classifier.predict(test_data)
-write_to_csv(ids, '../predictions/predictedFromDecisionTree.csv', y_pred)
+write_to_csv(IDs, '../predictions/predictedFromDecisionTree.csv', y_pred)
+#decision_boundary(x,y,classifier)
 
 # Splitting the dataset into training and test set.
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)

@@ -1,11 +1,20 @@
 # Write predictions in csv file.
 from statistics import median, mode, mean
+
+import pandas as pd
+from mlxtend.plotting import plot_decision_regions
+import numpy as np
+import seaborn as sns
 import seaborn as sn
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, pyplot
+from numpy import hstack, meshgrid, arange
+from pandas import DataFrame
 from sklearn import preprocessing
+from sklearn.decomposition import PCA
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_score
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, KBinsDiscretizer
+#from sklearn.inspection import DecisionBoundaryDisplay
 
 
 def write_to_csv(IDs, file_name, predictions):
@@ -42,6 +51,7 @@ def replace_nulls(train_data, test_data):
     train_data['Var_1'] = train_data['Var_1'].fillna(mode(train_data['Var_1']))
     test_data['Var_1'] = test_data['Var_1'].fillna(mode(test_data['Var_1']))
     return train_data, test_data
+
 
 
 def replace_nulls_with_median(data):
@@ -120,3 +130,88 @@ def stKfoldCrossVal(clf, x, y):
     # print(v)
     print("Cross Validation Scores are {}".format(score))
     print("Average Cross Validation score :{}".format(score.mean()))
+
+
+def discretization(dataset):
+    est = KBinsDiscretizer(n_bins=8, encode='ordinal', strategy='uniform')
+    new = est.fit_transform(dataset[['Age']])
+    dataset['Age'] = new
+    return dataset
+
+
+def decision_boundary(x,y,model):
+
+    pca = PCA(n_components=2)
+    X_train2 = pca.fit_transform(x)
+    model.fit(X_train2, y)
+    plot_decision_regions(X_train2, y[:, 0], clf=model, legend=2)
+    plt.show()
+
+def get_features_contributions(train_data,model):
+    # get features contribution to the model
+    '''RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+                        max_depth=None, max_features='auto', max_leaf_nodes=None,
+                        min_impurity_decrease=0.0,
+                        min_samples_leaf=1, min_samples_split=2,
+                        min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1,
+                        oob_score=False, random_state=None, verbose=0,
+                        warm_start=False, )
+    '''
+    columns = train_data.drop(['Segmentation'], axis=1).columns
+
+    feature_imp = pd.Series(model.feature_importances_, index=columns).sort_values(ascending=False)
+    print(feature_imp)
+
+    # Creating a bar plot
+    sns.barplot(x=feature_imp, y=feature_imp.index)
+    # Add labels to your graph
+    plt.xlabel('Feature Importance Score')
+    plt.ylabel('Features')
+    plt.title("Visualizing Important Features")
+    plt.legend()
+    plt.show()
+
+
+'''def easy_decision_boundary(X, y, model):
+    colors = "bry"
+    ax = plt.gca()
+    from mlxtend.plotting import plot_decision_regions
+    DecisionBoundaryDisplay.from_estimator(
+        model,
+        X,
+        cmap=plt.cm.Paired,
+        ax=ax,
+        response_method="predict",
+        xlabel="Age",
+        ylabel=["A", "B", "C", "D"],
+    )
+    # Plot also the training points
+    for i, color in zip(model.classes_, colors):
+        idx = np.where(y == i)
+        plt.scatter(
+            X[idx, 0],
+            X[idx, 1],
+            c=color,
+            label=["A","B","C","D",][i],
+            cmap=plt.cm.Paired,
+            edgecolor="black",
+            s=20,
+        )
+    plt.title("Decision surface of multi-class SGD")
+    plt.axis("tight")
+
+    xmin, xmax = plt.xlim()
+    ymin, ymax = plt.ylim()
+    coef = model.coef_
+    intercept = model.intercept_
+
+    def plot_hyperplane(c, color):
+        def line(x0):
+            return (-(x0 * coef[c, 0]) - intercept[c]) / coef[c, 1]
+
+        plt.plot([xmin, xmax], [line(xmin), line(xmax)], ls="--", color=color)
+
+    for i, color in zip(model.classes_, colors):
+        plot_hyperplane(i, color)
+    plt.legend()
+    plt.show()'''
