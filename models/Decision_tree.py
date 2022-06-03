@@ -22,7 +22,7 @@ x = train_data.drop(['Segmentation'], axis=1).values
 
 # Fitting Decision Tree classifier to the training set
 
-classifier = DecisionTreeClassifier(criterion='gini',splitter='random', random_state=0)
+classifier = DecisionTreeClassifier(criterion='entropy', random_state=0)
 classifier.fit(x, y)
 y_pred = classifier.predict(test_data)
 write_to_csv(IDs, '../predictions/predictedFromDecisionTree.csv', y_pred)
